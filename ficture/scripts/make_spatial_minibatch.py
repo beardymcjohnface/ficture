@@ -75,12 +75,14 @@ def make_spatial_minibatch(_args):
             st = str(int(float(st) * args.mu_scale) )
             ed = str(int(float(ed) * args.mu_scale) )
             reg_list.append(l+':'+'-'.join([st,ed]) )
-        cmd = ["tabix", args.input] + reg_list
-    if len(cmd) == 0:
-        p0 = sp.Popen(["zcat", args.input], stdout=sp.PIPE)
-        process = sp.Popen(["tail", "-n", "+2"], stdin=p0.stdout, stdout=sp.PIPE)
-    else:
-        process = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.STDOUT)
+    #     cmd = ["tabix", args.input] + reg_list
+    #     # if len(cmd) == 0:
+    #     #     p0 = sp.Popen(["zcat", args.input], stdout=sp.PIPE)
+    #     #     process = sp.Popen(["tail", "-n", "+2"], stdin=p0.stdout, stdout=sp.PIPE)
+    #     # else:
+    #     #     process = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.STDOUT)
+    process = gzip.open(args.input, "rt")
+    _ = process.readline()
 
     ### Group pixels into minibatches
     output_header = copy.copy(input_header)

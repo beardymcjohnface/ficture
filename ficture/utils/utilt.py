@@ -363,17 +363,17 @@ def read_ct_from_solo_barcodes_tsv(file, key, chunksize=500000, mu_scale=-1):
 def make_mtx_from_dge(file, min_ct_per_feature = 50, min_ct_per_unit = 100, feature_white_list = None, feature_list = None, unit = "random_index", key = "gn", epoch=1, epoch_id_length=2, return_df = False):
     df = pd.DataFrame()
     epoch_id_list = set()
-    for chunk in pd.read_csv(file, sep='\t', usecols = [unit,'X','Y','gene',key], dtype={unit:str}, chunksize=500000):
-        unit_list = chunk[unit].str[:epoch_id_length].unique()
-        i = 0
-        while len(epoch_id_list) < epoch and i < len(unit_list):
-            epoch_id_list.add(unit_list[i])
-            i += 1
-        if len(epoch_id_list) >= epoch and unit_list[-1] not in epoch_id_list:
-            pat = '^' + '|'.join(list(epoch_id_list))
-            df = pd.concat([df, chunk[chunk[unit].str.contains(pat) & chunk[key].ge(1)] ])
-            break
-        df = pd.concat([df, chunk[chunk[key].ge(1)] ])
+    df = pd.read_csv(file, sep='\t', usecols = [unit,'X','Y','gene',key], dtype={unit:str})
+        # unit_list = chunk[unit].str[:epoch_id_length].unique()
+        # i = 0
+        # while len(epoch_id_list) < epoch and i < len(unit_list):
+        #     epoch_id_list.add(unit_list[i])
+        #     i += 1
+        # if len(epoch_id_list) >= epoch and unit_list[-1] not in epoch_id_list:
+        #     pat = '^' + '|'.join(list(epoch_id_list))
+        #     df = pd.concat([df, chunk[chunk[unit].str.contains(pat) & chunk[key].ge(1)] ])
+        #     break
+        # df = pd.concat([df, chunk[chunk[key].ge(1)] ])
     epoch0 = df[unit].iloc[0][:epoch_id_length]
     one_pass = df[unit].str[:epoch_id_length].eq(epoch0)
     if feature_list is not None:

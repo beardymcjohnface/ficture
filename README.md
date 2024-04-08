@@ -1,3 +1,5 @@
+__Fork contains quick fixes for our lab running with CosMX__
+
 # FICTURE
 
 FICTURE: Scalable segmentation-free analysis of sub-micron resolution spatial transcriptomics
